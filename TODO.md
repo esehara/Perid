@@ -1,16 +1,17 @@
 General
 =======
 
-* Create Lexer
-    * Get Token
-    * define Token String
-    * define Token Symbol
-* Create Parser
-* Create Interpriter
-* Create Runtime
+Document
+--------
+* Write
+  * Regal
+  * Site
+  * Sample Code
+  * Specification
 
-Lexer
-=====
-
-* Analyze "String" Token
-* Analyze "Symbol" Token
+Feature
+=======
+* Compiled Intepriter (C or Go or Rust or Haskell ?)
+  * And JVM
+* Easy Translate Other Language (example: JavaScript)
+* Language Specification check by any way (Automatic).
