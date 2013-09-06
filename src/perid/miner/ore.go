@@ -84,8 +84,8 @@ const(
 )
 
 var tokens = [...]string {
-    STRING: "String",
-    ATOM: "Atom",
+    STRING: "STRING",
+    ATOM: "ATOM",
 }
 
 var keywords map[string]Token

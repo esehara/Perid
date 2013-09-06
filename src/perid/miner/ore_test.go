@@ -32,7 +32,7 @@ func TestCanMining(t *testing.T) {
 
 func TestTokenStringGet(t *testing.T) {
     token := STRING
-    if token.ToString() != "String" {
+    if token.ToString() != "STRING" {
         t.Errorf("Cannot get token string")
     }
 }
