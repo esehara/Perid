@@ -25,7 +25,7 @@ action: ATOM {
             }
       | ATOM literal {
                 var v Value
-                v = Box{Type: ATOM, Value: $1, box: $2}
+                v = Box{Type: ATOM, Value: $1, Box: $2}
                 yylex.(*lex).NewBox(v)
             }
 
@@ -73,7 +73,7 @@ func toToken(ore miner.Ore) int {
 type Box struct {
     Type int
     Value Value
-    box Val
+    Box Val
 }
 
 func (l *lex) NewBox(any Value) {

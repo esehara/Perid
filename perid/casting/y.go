@@ -66,7 +66,7 @@ func toToken(ore miner.Ore) int {
 type Box struct {
     Type int
     Value Value
-    box Val
+    Box Val
 }
 
 func (l *lex) NewBox(any Value) {
@@ -378,7 +378,7 @@ yydefault:
 		//line casting.y:26
 		{
 	                var v Value
-	                v = Box{Type: ATOM, Value: yyS[yypt-1].val, box: yyS[yypt-0].values}
+	                v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: yyS[yypt-0].values}
 	                yylex.(*lex).NewBox(v)
 	            }
 	case 3:
