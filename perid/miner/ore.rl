@@ -1,3 +1,4 @@
+// -*- mode:go-mode -*-
 %%{
     #
     # Define Analizer Machine for Perid
@@ -6,16 +7,16 @@
     
     # Parse Rule
     
-    # keyword = "print";
-    
-    #Literal ---------------
+    # ---- Literal ----
     string = ("'" . (any - "'")* . "'")
             |('"' . (any - '"')* . '"');
-    
-    #literal = string;
-    #Literal Define END
-    
+	integer = digit+;
     atom = (alpha (alpha | digit)* );
+
+	# ---- Operator ----
+	operator = "+" | "-" | "*" | "/";
+	binder = "=";
+
     #Mining Token
     main := |*
         atom => {
@@ -32,7 +33,32 @@
                 Value: data[ts:te],
             }
             material.Research()
-            ores = append(ores, material) };
+            ores = append(ores, material)
+		};
+		integer => {
+			material := Ore {
+				Token: INTEGER,
+				Value: data[ts:te],
+			}
+			material.Research()
+			ores = append(ores, material)
+		};
+		operator => {
+			material := Ore {
+				Token: OPERATOR,
+				Value: data[ts:te],
+			}
+			material.Research()
+			ores = append(ores, material)
+		};
+		binder => {
+			material := Ore {
+				Token: BINDER,
+				Value: data[ts:te],
+			}
+			material.Research()
+			ores = append(ores, material)
+		};
         space;
     *|;
 }%%
@@ -52,12 +78,18 @@ const(
     begin_define_literal
         ATOM
         STRING
+		INTEGER
     end_define_literal
-)
+	OPERATOR
+	BINDER
+	)
 
 var tokens = [...]string {
     STRING: "STRING",
     ATOM: "ATOM",
+	INTEGER: "INTEGER",
+	OPERATOR: "OPERATOR",
+	BINDER: "BINDER",
 }
 
 var keywords map[string]Token
