@@ -18,10 +18,16 @@ type yySymType struct {
 
 const ATOM = 57346
 const STRING = 57347
+const OPERATOR = 57348
+const BINDER = 57349
+const DEFINE = 57350
 
 var yyToknames = []string{
 	"ATOM",
 	"STRING",
+	"OPERATOR",
+	"BINDER",
+	"DEFINE",
 }
 var yyStatenames = []string{}
 
@@ -29,12 +35,14 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyMaxDepth = 200
 
-//line casting.y:40
+//line casting.y:50
  /* --- start of programs */
 
 var oretokens = [...]int {
     miner.ATOM: ATOM,
     miner.STRING: STRING,
+    miner.OPERATOR: OPERATOR,
+	miner.BINDER: BINDER,
 }
 
 type Value interface{}
@@ -95,41 +103,42 @@ var yyExca = []int{
 	-2, 0,
 }
 
-const yyNprod = 4
+const yyNprod = 6
 const yyPrivate = 57344
 
 var yyTokenNames []string
 var yyStates []string
 
-const yyLast = 4
+const yyLast = 11
 
 var yyAct = []int{
 
-	4, 2, 3, 1,
+	5, 8, 4, 7, 5, 3, 2, 1, 0, 0,
+	6,
 }
 var yyPact = []int{
 
-	-3, -1000, -5, -1000, -1000,
+	2, -1000, -5, -1000, -1, -3, -1000, -4, -1000,
 }
 var yyPgo = []int{
 
-	0, 3, 2,
+	0, 7, 5,
 }
 var yyR1 = []int{
 
-	0, 1, 1, 2,
+	0, 1, 1, 1, 2, 2,
 }
 var yyR2 = []int{
 
-	0, 1, 2, 1,
+	0, 1, 2, 3, 1, 3,
 }
 var yyChk = []int{
 
-	-1000, -1, 4, -2, 5,
+	-1000, -1, 4, -2, 7, 5, -2, 6, 5,
 }
 var yyDef = []int{
 
-	0, -2, 1, 2, 3,
+	0, -2, 1, 2, 0, 4, 3, 0, 5,
 }
 var yyTok1 = []int{
 
@@ -137,7 +146,7 @@ var yyTok1 = []int{
 }
 var yyTok2 = []int{
 
-	2, 3, 4, 5,
+	2, 3, 4, 5, 6, 7, 8,
 }
 var yyTok3 = []int{
 	0,
@@ -370,24 +379,39 @@ yydefault:
 	case 1:
 		//line casting.y:21
 		{
-	                var v Value
-	                v = Box{Value: ATOM}
-	                yylex.(*lex).NewBox(v)
-	            }
+	  var v Value
+	  v = Box{Value: ATOM}
+	  yylex.(*lex).NewBox(v)
+	  }
 	case 2:
 		//line casting.y:26
 		{
-	                var v Value
-	                v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: yyS[yypt-0].values}
-	                yylex.(*lex).NewBox(v)
-	            }
+	  var v Value
+	  v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: yyS[yypt-0].values}
+	  yylex.(*lex).NewBox(v)
+	  }
 	case 3:
-		//line casting.y:34
+		//line casting.y:31
+		{
+	  var v Value
+	  v = Box{Type: BINDER, Value: yyS[yypt-2].val, Box: yyS[yypt-0].values}
+	  yylex.(*lex).NewBox(v)
+	 }
+	case 4:
+		//line casting.y:38
 		{
 	            var newval Val
 	            newval = Val{Box{Type: STRING, Value: yyS[yypt-0].val}}
 	            yyVAL.values = newval
-	            }
+	         }
+	case 5:
+		//line casting.y:43
+		{
+	            var newval Val
+	            result := operate_string(yyS[yypt-2].val, yyS[yypt-1].val, yyS[yypt-0].val)
+	            newval = Val{Box{Type: STRING, Value: result}}
+	            yyVAL.values = newval
+	         }
 	}
 	goto yystack /* stack new state and value */
 }

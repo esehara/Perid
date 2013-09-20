@@ -37,13 +37,43 @@ func TestTokenStringGet(t *testing.T) {
     }
 }
 
-func TestDefineLiteral(t *testing.T) {
-    src := "print 'foobar'"
-    ores = Mining(src)
-    MiningResult(
-        "TestDefineLiteral",
-        ores)
-    if len(ores) != 2 {
-        t.Errorf("Ores should mining 2, but really %d.", len(ores))
-    }
+func isDefine (src, testname string, wish_token int) bool {
+	ores = Mining(src)
+	MiningResult("[Test::Define]" + testname, ores)
+	if len(ores) != wish_token {
+		return false
+	}
+	return true
+}
+
+func TestDefineString(t *testing.T) {
+	if !isDefine(
+		"print 'Hello!'",
+		"String", 2) {
+			t.Errorf("Ores should mining 2, but really %d.", len(ores))
+		}
+}
+
+func TestDefineInteger(t *testing.T) {
+	if !isDefine(
+		"print 30",
+		"Integer", 2) {
+			t.Errorf("Ores should mining 2, but really %d.", len(ores))
+		}
+}
+
+func TestDefineOperator(t *testing.T) {
+	if !isDefine(
+		"1 + 99",
+		"Operator", 3) {
+			t.Errorf("Ores should mining 3, but really %d.", len(ores))
+		}
+}
+
+func TestDefineBinder(t *testing.T) {
+	if !isDefine(
+		"foobar = 100",
+		"Binder", 3) {
+			t.Errorf("Ores should mining 3, but really %d.", len(ores))
+		}
 }
