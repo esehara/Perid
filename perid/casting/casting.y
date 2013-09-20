@@ -12,36 +12,53 @@ import (
     values Val
     box Box
 }
-
-%token ATOM STRING
-%type <val> ATOM, STRING, action
-%type <values> literal
+%token ATOM STRING OPERATOR BINDER DEFINE
+%type <val> ATOM, STRING, OPERATOR, BINDER, DEFINE
+%type <val> action
+%type <values> StringExpression
 %%
 
-action: ATOM {
-                var v Value
-                v = Box{Value: ATOM}
-                yylex.(*lex).NewBox(v)
-            }
-      | ATOM literal {
-                var v Value
-                v = Box{Type: ATOM, Value: $1, Box: $2}
-                yylex.(*lex).NewBox(v)
-            }
+action: AtomExpression {
+  var v Value
+  v = Box{Value: ATOM}
+  yylex.(*lex).NewBox(v)
+  }
+| AtomExpression StringExpression {
+  var v Value
+  v = Box{Type: ATOM, Value: $1, Box: $2}
+  yylex.(*lex).NewBox(v)
+  }
+| AtomExpression BINDER StringExpression {
+  var v Value
+  v = Box{Type: BINDER, Value: $1, Box: $3}
+  yylex.(*lex).NewBox(v)
+ }
+;
 
-      ;
-
-literal: STRING {
+AtomExpresion: ATOM {
+  var newval Val
+  newval = Val{Box{Type:ATOM, Value:$1}}
+  $$ = newval
+	};
+StringExpression: STRING {
             var newval Val
             newval = Val{Box{Type: STRING, Value: $1}}
             $$ = newval
-            }
+         }
+       | STRING OPERATOR STRING {
+            var newval Val
+            result := operate_string($1, $2, $3)
+            newval = Val{Box{Type: STRING, Value: result}}
+            $$ = newval
+         }
        ;
 %% /* --- start of programs */
 
 var oretokens = [...]int {
     miner.ATOM: ATOM,
     miner.STRING: STRING,
+    miner.OPERATOR: OPERATOR,
+	miner.BINDER: BINDER,
 }
 
 type Value interface{}
