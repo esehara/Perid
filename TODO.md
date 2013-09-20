@@ -1,6 +1,13 @@
 General
 =======
 
+Milestone
+---------
+* FizzBuzz
+  * can bind atom
+  * can define function
+  
+
 Document
 --------
 * Write
@@ -11,7 +18,4 @@ Document
 
 Feature
 =======
-* Compiled Intepriter (C or Go or Rust or Haskell ?)
-  * And JVM
-* Easy Translate Other Language (example: JavaScript)
 * Language Specification check by any way (Automatic).
