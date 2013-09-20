@@ -32,21 +32,36 @@ func TestToToken(t *testing.T) {
 		t.Errorf("cannot tokenize: %d, should be STRING %d", tokenize, STRING)
 	}
 }
-
-func TestMiningToCasting(t *testing.T) {
+func generateCoin(src string) *lex{
+	var l *lex
 	var ores []miner.Ore
-	ores = miner.Mining("print 'Hello'")
+	ores = miner.Mining(src)
 	fmt.Println(ores)
-	l := &lex{
+	l = &lex{
 		ores,
 		Val{},
 	}
 	yyParse(l)
 	fmt.Println(l)
+	return l
+}
+
+func TestMiningToCasting(t *testing.T) {
+	generateCoin("print 'Hello'")
 }
 
 func TestCastingToExpose(t *testing.T) {
 	fmt.Println("=== can refer function test")
 	l := Caster("print 'Hello'")
 	fmt.Println(l)
+}
+
+func TestOperator(t *testing.T) {
+	fmt.Println("=== operation test")
+	generateCoin("print 'Hello, ' + 'And, Im born here.'")
+}
+
+func TestDefine(t *testing.T) {
+	fmt.Println("=== bind atom")
+	generateCoin("foobar = 'Hello, Perid'")
 }
