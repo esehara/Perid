@@ -3,7 +3,7 @@ Programmig Language "Perid"
 
 What is "Perid"?
 ------------------
-"Perid" is "Lightware Language" made Go lang.
+"Perid" is "Lightweight Language" made Go lang.
 
 "Perid" named from "Peridot" jewel.
 
