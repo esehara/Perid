@@ -2,6 +2,7 @@ package apprise
 import (
 	"fmt"
 	"../casting"
+	"../goldkey"
 )
 
 func Apprise(toplevel casting.Val) {
@@ -41,7 +42,7 @@ func evalatom(box casting.Box) {
 
 	if box.Value == "print" {
 		if str,ok := result.(string); ok {
-			result = str[1:len(str) - 1]
+			result = goldkey.CastString(str)
 		}
 		fmt.Println(result)
 	}
