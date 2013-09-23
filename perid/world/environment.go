@@ -40,3 +40,25 @@ func (environ *envs) Len() int {
 func (environ *envs) Append(value env) {
 	environment = append(environment, value)
 }
+
+func (environ *envs) SetValue(value env) {
+	if val, ok := value.(EnvValue); ok {
+		if ok, _:= environ.Search(val.Name); !ok {
+			environ.Append(val)
+		} else {
+			// Todo: raise Error
+			// Not Single Assignment Error
+		}
+	}
+}
+
+func (environ *envs) Search(name string) (bool, env) {
+	for _, rawenv := range environment {
+		if envval, ok := rawenv.(EnvValue); ok && envval.Name == name {
+			return true, envval.Val
+		}
+	}
+
+	var nullvalue env
+	return false, nullvalue
+}
