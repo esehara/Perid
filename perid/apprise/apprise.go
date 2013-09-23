@@ -12,8 +12,11 @@ func Apprise(toplevel casting.Val) {
 
 func eval(node casting.Val) casting.Value{
 	var line casting.Value
-	line = node[0]
-	return evalroot(line)
+	if len(node) > 0 {
+		line = node[0]
+		return evalroot(line)
+	}
+	return new(casting.Value)
 }
 
 func evalroot(line casting.Value) casting.Value{

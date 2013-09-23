@@ -15,7 +15,7 @@ import (
 }
 %token ATOM STRING OPERATOR BINDER DEFINE
 %type <val> ATOM, STRING, OPERATOR, BINDER, DEFINE
-%type <val> action, AtomExpression
+%type <val> action, AtomExpression, Expression
 %type <values> StringExpression
 %%
 
@@ -25,30 +25,47 @@ import (
 	 v = Box{Type: ATOM, Value: $1,}
 	 yylex.(*lex).NewBox(v)  
    }
-|  ATOM StringExpression {
-	 var v Value
-	 v = Box{Type: ATOM, Value: $1, Box: $2}
-	 yylex.(*lex).NewBox(v)
-  }
-| ATOM BINDER StringExpression {
+| Expression {
+	if val, ok := $1.(Value); ok {
+		yylex.(*lex).NewBox(val)
+	}
+}
+| ATOM BINDER Expression {
   var v Value
-  v = Box{Type: BINDER, Value: $1, Box: $3}
-  yylex.(*lex).NewBox(v)
+	if val, ok := $3.(Val); ok {
+		v = Box{Type: BINDER, Value: $1, Box: val}
+	} else {
+		v = Box{Type: BINDER, Value: $1, Box: Val{$3}}
+	}
+	yylex.(*lex).NewBox(v)
  }
 | ATOM AtomExpression {
   var v Value
-	if vals, ok := $2.(Val); ok {
-	v = Box{Type: ATOM, Value: $1, Box: vals}
+	if val, ok := $2.(Value); ok {
+		v = Box{Type: ATOM, Value: $1, Box: Val{val}}
 	yylex.(*lex).NewBox(v)
    }
  }
 ;
 
+Expression:
+AtomExpression StringExpression {
+	if val, ok := $1.(Box); ok {
+		val.Box = $2 
+		$$ = val
+	}
+}
+| StringExpression {
+	$$ = $1
+}
+;
+
 AtomExpression: ATOM {
-  var newval Val
-  newval = Val{Box{Type:ATOM, Value:$1}}
+  var newval Value
+  newval = Box{Type:ATOM, Value:$1}
   $$ = newval
-	};
+};
+
 StringExpression: STRING {
             var newval Val
             newval = Val{Box{Type: STRING, Value: $1}}

@@ -25,6 +25,18 @@ func ExampleBindAtom() {
 	//output: Hello
 }
 
+func TestBindAtomAtom(t *testing.T) {
+	env := world.AccessEnv()
+	env.UnsafeReset()
+	var coins casting.Val
+	coins = casting.Caster("foobar = print 'Hello'")
+	Apprise(coins)
+	fmt.Println("=== Result Enviroment binding Atom to Atom")
+	fmt.Println(env)
+	coins = casting.Caster("foobar")
+	Apprise(coins)
+}
+
 func TestBindAtom(t *testing.T) {
 	env := world.AccessEnv()
 	env.UnsafeReset()
