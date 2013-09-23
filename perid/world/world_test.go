@@ -4,8 +4,14 @@ import (
 	"testing"
 )
 
+func SetUpTest() *envs {
+	environ := AccessEnv()
+	environ.UnsafeReset()
+	return environ
+}
+
 func TestEnvironmentIsSingleton (t *testing.T) {
-	environ := AccessEnv() 
+	environ := SetUpTest()
 	if environ.Len() != 0 {
 		t.Errorf("Enviroment singleton is not initialize")
 	}

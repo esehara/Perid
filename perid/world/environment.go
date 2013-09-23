@@ -10,9 +10,21 @@ type env interface{}
 type envs []env
 var environment envs
 
+type EnvValue struct {
+	Name string
+	Val env
+}
+
 // Access enviroment singleton
 func AccessEnv() *envs {
 	return &environment
+}
+
+
+// Enviroment is Singleton. And Unit Test is *complex* Value.
+// Then, when is not unit test, don't use.
+func (environ *envs) UnsafeReset() {
+	environment = envs{} 
 }
 
 // Access enviroment return array pointer,
