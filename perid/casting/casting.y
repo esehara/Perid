@@ -35,7 +35,7 @@ action: AtomExpression {
  }
 ;
 
-AtomExpresion: ATOM {
+AtomExpression: ATOM {
   var newval Val
   newval = Val{Box{Type:ATOM, Value:$1}}
   $$ = newval
