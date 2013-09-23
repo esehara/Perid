@@ -1,0 +1,3 @@
+print "Hello, Perid."
+foobar = "And, " + "I'm born here!!"
+print foobar

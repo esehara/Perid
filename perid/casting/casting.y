@@ -1,3 +1,4 @@
+// -*- mode:go-mode -*-
 %{
 package casting
 
@@ -14,24 +15,32 @@ import (
 }
 %token ATOM STRING OPERATOR BINDER DEFINE
 %type <val> ATOM, STRING, OPERATOR, BINDER, DEFINE
-%type <val> action
+%type <val> action, AtomExpression
 %type <values> StringExpression
 %%
 
-action: AtomExpression {
-  var v Value
-  v = Box{Value: ATOM}
-  yylex.(*lex).NewBox(v)
+   action:
+   ATOM {
+	 var v Value
+	 v = Box{Type: ATOM, Value: $1,}
+	 yylex.(*lex).NewBox(v)  
+   }
+|  ATOM StringExpression {
+	 var v Value
+	 v = Box{Type: ATOM, Value: $1, Box: $2}
+	 yylex.(*lex).NewBox(v)
   }
-| AtomExpression StringExpression {
-  var v Value
-  v = Box{Type: ATOM, Value: $1, Box: $2}
-  yylex.(*lex).NewBox(v)
-  }
-| AtomExpression BINDER StringExpression {
+| ATOM BINDER StringExpression {
   var v Value
   v = Box{Type: BINDER, Value: $1, Box: $3}
   yylex.(*lex).NewBox(v)
+ }
+| ATOM AtomExpression {
+  var v Value
+	if vals, ok := $2.(Val); ok {
+	v = Box{Type: ATOM, Value: $1, Box: vals}
+	yylex.(*lex).NewBox(v)
+   }
  }
 ;
 

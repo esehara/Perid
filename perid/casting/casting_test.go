@@ -50,6 +50,11 @@ func TestMiningToCasting(t *testing.T) {
 	generateCoin("print 'Hello'")
 }
 
+func TestAtomOnly(t *testing.T) {
+	fmt.Println("=== atom only")
+	generateCoin("print")
+}
+
 func TestCastingToExpose(t *testing.T) {
 	fmt.Println("=== can refer function test")
 	l := Caster("print 'Hello'")
@@ -64,4 +69,9 @@ func TestOperator(t *testing.T) {
 func TestDefine(t *testing.T) {
 	fmt.Println("=== bind atom")
 	generateCoin("foobar = 'Hello, Perid'")
+}
+
+func TestAtomAndAtom(t *testing.T) {
+	fmt.Println("=== atom and atom")
+	generateCoin("print foobar")
 }

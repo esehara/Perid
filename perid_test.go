@@ -1,12 +1,12 @@
 package main
 
 import (
-	"./perid/world"
+	"./perid/apprise"
 )
 
 func ExamplePrint() {
-	lines := read_fileline("./case/print.pld")
-	world.LineEval(lines)
+	lines := read_fileline("./case/print.prd")
+	apprise.LineEval(lines)
 	//Output:
 	//Hello, Perid.
 	//And, I'm born here!!

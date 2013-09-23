@@ -1,5 +1,5 @@
 
-//line casting.y:2
+//line casting.y:3
 package casting
 
 import (
@@ -7,7 +7,7 @@ import (
     "../miner"
 )
 
-//line casting.y:9
+//line casting.y:10
 type yySymType struct {
 	yys int
     tok int
@@ -35,7 +35,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyMaxDepth = 200
 
-//line casting.y:50
+//line casting.y:64
  /* --- start of programs */
 
 var oretokens = [...]int {
@@ -103,42 +103,45 @@ var yyExca = []int{
 	-2, 0,
 }
 
-const yyNprod = 6
+const yyNprod = 8
 const yyPrivate = 57344
 
 var yyTokenNames []string
 var yyStates []string
 
-const yyLast = 11
+const yyLast = 12
 
 var yyAct = []int{
 
-	5, 8, 4, 7, 5, 3, 2, 1, 0, 0,
-	6,
+	7, 6, 10, 4, 9, 6, 3, 2, 5, 1,
+	0, 8,
 }
 var yyPact = []int{
 
-	2, -1000, -5, -1000, -1, -3, -1000, -4, -1000,
+	3, -1000, -4, -1000, 0, -1000, -2, -1000, -1000, -3,
+	-1000,
 }
 var yyPgo = []int{
 
-	0, 7, 5,
+	0, 9, 8, 6,
 }
 var yyR1 = []int{
 
-	0, 1, 1, 1, 2, 2,
+	0, 1, 1, 1, 1, 2, 3, 3,
 }
 var yyR2 = []int{
 
-	0, 1, 2, 3, 1, 3,
+	0, 1, 2, 3, 2, 1, 1, 3,
 }
 var yyChk = []int{
 
-	-1000, -1, 4, -2, 7, 5, -2, 6, 5,
+	-1000, -1, 4, -3, 7, -2, 5, 4, -3, 6,
+	5,
 }
 var yyDef = []int{
 
-	0, -2, 1, 2, 0, 4, 3, 0, 5,
+	0, -2, 1, 2, 0, 4, 6, 5, 3, 0,
+	7,
 }
 var yyTok1 = []int{
 
@@ -377,21 +380,21 @@ yydefault:
 	switch yynt {
 
 	case 1:
-		//line casting.y:21
+		//line casting.y:23
 		{
-	  var v Value
-	  v = Box{Value: ATOM}
-	  yylex.(*lex).NewBox(v)
-	  }
+		 var v Value
+		 v = Box{Type: ATOM, Value: yyS[yypt-0].val,}
+		 yylex.(*lex).NewBox(v)  
+	   }
 	case 2:
-		//line casting.y:26
+		//line casting.y:28
 		{
-	  var v Value
-	  v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: yyS[yypt-0].values}
-	  yylex.(*lex).NewBox(v)
+		 var v Value
+		 v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: yyS[yypt-0].values}
+		 yylex.(*lex).NewBox(v)
 	  }
 	case 3:
-		//line casting.y:31
+		//line casting.y:33
 		{
 	  var v Value
 	  v = Box{Type: BINDER, Value: yyS[yypt-2].val, Box: yyS[yypt-0].values}
@@ -400,12 +403,28 @@ yydefault:
 	case 4:
 		//line casting.y:38
 		{
+	  var v Value
+		if vals, ok := yyS[yypt-0].val.(Val); ok {
+		v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: vals}
+		yylex.(*lex).NewBox(v)
+	   }
+	 }
+	case 5:
+		//line casting.y:47
+		{
+	  var newval Val
+	  newval = Val{Box{Type:ATOM, Value:yyS[yypt-0].val}}
+	  yyVAL.val = newval
+		}
+	case 6:
+		//line casting.y:52
+		{
 	            var newval Val
 	            newval = Val{Box{Type: STRING, Value: yyS[yypt-0].val}}
 	            yyVAL.values = newval
 	         }
-	case 5:
-		//line casting.y:43
+	case 7:
+		//line casting.y:57
 		{
 	            var newval Val
 	            result := operate_string(yyS[yypt-2].val, yyS[yypt-1].val, yyS[yypt-0].val)
