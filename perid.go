@@ -1,10 +1,11 @@
 package main
+
 import (
-	"fmt"
-	"os"
-	"flag"
-	"io"
 	"bufio"
+	"flag"
+	"fmt"
+	"io"
+	"os"
 )
 
 // read file, and eval Period Language
@@ -32,14 +33,13 @@ func read_fileline(path string) []string {
 
 		readline, err = reader.ReadString('\n')
 	}
-	return lines 
+	return lines
 }
-
 
 func main() {
 	flag.Parse()
 	argv := flag.Args()
-	
+
 	if len(argv) > 0 {
 		lines := read_fileline(argv[0])
 		fmt.Println(lines)

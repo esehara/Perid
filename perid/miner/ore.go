@@ -2,7 +2,7 @@
 // line 1 "ore.rl"
 // -*- mode:go-mode -*-
 
-// line 64 "ore.rl"
+// line 49 "ore.rl"
 
 
 package miner
@@ -12,21 +12,22 @@ package miner
 var _miner_actions []byte = []byte{
 	0, 1, 0, 1, 1, 1, 2, 1, 3, 
 	1, 4, 1, 5, 1, 6, 1, 7, 
+	1, 8, 1, 9, 
 }
 
 var _miner_key_offsets []byte = []byte{
-	0, 0, 1, 2, 18, 20, 
+	0, 0, 1, 2, 20, 22, 
 }
 
 var _miner_trans_keys []byte = []byte{
-	34, 39, 32, 34, 39, 45, 47, 61, 
-	9, 13, 42, 43, 48, 57, 65, 90, 
-	97, 122, 48, 57, 48, 57, 65, 90, 
-	97, 122, 
+	34, 39, 32, 34, 39, 40, 41, 45, 
+	47, 61, 9, 13, 42, 43, 48, 57, 
+	65, 90, 97, 122, 48, 57, 48, 57, 
+	65, 90, 97, 122, 
 }
 
 var _miner_single_lengths []byte = []byte{
-	0, 1, 1, 6, 0, 0, 
+	0, 1, 1, 8, 0, 0, 
 }
 
 var _miner_range_lengths []byte = []byte{
@@ -34,21 +35,21 @@ var _miner_range_lengths []byte = []byte{
 }
 
 var _miner_index_offsets []byte = []byte{
-	0, 0, 2, 4, 16, 18, 
+	0, 0, 2, 4, 18, 20, 
 }
 
 var _miner_trans_targs []byte = []byte{
 	3, 1, 3, 2, 3, 1, 2, 3, 
-	3, 3, 3, 3, 4, 5, 5, 0, 
-	4, 3, 5, 5, 5, 3, 3, 3, 
-	
+	3, 3, 3, 3, 3, 3, 4, 5, 
+	5, 0, 4, 3, 5, 5, 5, 3, 
+	3, 3, 
 }
 
 var _miner_trans_actions []byte = []byte{
-	5, 0, 5, 0, 11, 0, 0, 7, 
-	7, 9, 11, 7, 0, 0, 0, 0, 
-	0, 15, 0, 0, 0, 13, 15, 13, 
-	
+	5, 0, 5, 0, 15, 0, 0, 11, 
+	13, 7, 7, 9, 15, 7, 0, 0, 
+	0, 0, 0, 19, 0, 0, 0, 17, 
+	19, 17, 
 }
 
 var _miner_to_state_actions []byte = []byte{
@@ -60,7 +61,7 @@ var _miner_from_state_actions []byte = []byte{
 }
 
 var _miner_eof_trans []byte = []byte{
-	0, 0, 0, 0, 23, 24, 
+	0, 0, 0, 0, 25, 26, 
 }
 
 const miner_start int = 3
@@ -70,9 +71,10 @@ const miner_error int = 0
 const miner_en_main int = 3
 
 
-// line 69 "ore.rl"
+// line 54 "ore.rl"
 
 type Token int
+
 
 const(
     //Special Token
@@ -87,7 +89,9 @@ const(
     end_define_literal
 	OPERATOR
 	BINDER
-	)
+	ROUNDPAREN_O
+    ROUNDPAREN_C
+    )
 
 var tokens = [...]string {
     STRING: "STRING",
@@ -95,6 +99,8 @@ var tokens = [...]string {
 	INTEGER: "INTEGER",
 	OPERATOR: "OPERATOR",
 	BINDER: "BINDER",
+    ROUNDPAREN_O: "(",
+    ROUNDPAREN_C: ")",
 }
 
 var keywords map[string]Token
@@ -109,6 +115,15 @@ type Ore struct {
     Value Any
 }
 var material Ore
+
+func appendOre (miningore Token, bag []Ore, data string, ts, te int) []Ore {
+	material := Ore {
+	    Token: miningore,
+		Value: data[ts:te],
+	}
+	material.Research()
+	return append(bag, material)
+}
 
 func (tok Token) ToString() string {
     return tokens[tok]
@@ -128,7 +143,7 @@ func Mining (data string) []Ore {
     var ores []Ore
 
     
-// line 132 "ore.go"
+// line 147 "ore.go"
 	{
 	cs = miner_start
 	ts = 0
@@ -136,9 +151,9 @@ func Mining (data string) []Ore {
 	act = 0
 	}
 
-// line 126 "ore.rl"
+// line 125 "ore.rl"
     
-// line 142 "ore.go"
+// line 157 "ore.go"
 	{
 	var _klen int
 	var _trans int
@@ -162,7 +177,7 @@ _resume:
 
 ts = p
 
-// line 166 "ore.go"
+// line 181 "ore.go"
 		}
 	}
 
@@ -232,73 +247,62 @@ _eof_trans:
 		_acts++
 		switch _miner_actions[_acts-1] {
 		case 2:
-// line 30 "ore.rl"
+// line 29 "ore.rl"
 
 te = p+1
 {
-            material := Ore{
-                Token: STRING,
-                Value: data[ts:te],
-            }
-            material.Research()
-            ores = append(ores, material)
+            ores = appendOre(STRING, ores, data, ts, te)
 		}
 		case 3:
-// line 46 "ore.rl"
+// line 35 "ore.rl"
 
 te = p+1
 {
-			material := Ore {
-				Token: OPERATOR,
-				Value: data[ts:te],
-			}
-			material.Research()
-			ores = append(ores, material)
+            ores = appendOre(OPERATOR, ores, data, ts, te)
 		}
 		case 4:
-// line 54 "ore.rl"
-
-te = p+1
-{
-			material := Ore {
-				Token: BINDER,
-				Value: data[ts:te],
-			}
-			material.Research()
-			ores = append(ores, material)
-		}
-		case 5:
-// line 62 "ore.rl"
-
-te = p+1
-
-		case 6:
-// line 22 "ore.rl"
-
-te = p
-p--
-{
-            material := Ore{
-                Token: ATOM,
-                Value: data[ts:te],
-            }
-            material.Research()
-            ores = append(ores, material) 
-        }
-		case 7:
 // line 38 "ore.rl"
 
+te = p+1
+{
+		    ores = appendOre(BINDER, ores, data, ts, te)
+        }
+		case 5:
+// line 41 "ore.rl"
+
+te = p+1
+{
+            ores = appendOre(ROUNDPAREN_O, ores, data, ts, te)
+        }
+		case 6:
+// line 44 "ore.rl"
+
+te = p+1
+{
+            ores = appendOre(ROUNDPAREN_C, ores, data, ts, te)
+        }
+		case 7:
+// line 47 "ore.rl"
+
+te = p+1
+
+		case 8:
+// line 26 "ore.rl"
+
 te = p
 p--
 {
-			material := Ore {
-				Token: INTEGER,
-				Value: data[ts:te],
-			}
-			material.Research()
-			ores = append(ores, material)
+            ores = appendOre(ATOM, ores, data, ts, te)
+        }
+		case 9:
+// line 32 "ore.rl"
+
+te = p
+p--
+{
+			ores = appendOre(INTEGER, ores, data, ts, te)
 		}
-// line 302 "ore.go"
+// line 306 "ore.go"
 		}
 	}
 
@@ -313,7 +317,7 @@ _again:
 
 ts = 0
 
-// line 317 "ore.go"
+// line 321 "ore.go"
 		}
 	}
 
@@ -335,7 +339,7 @@ ts = 0
 	_out: {}
 	}
 
-// line 127 "ore.rl"
+// line 126 "ore.rl"
 
     _, _, _ = ts, te, act
     return ores

@@ -75,3 +75,8 @@ func TestAtomAndAtom(t *testing.T) {
 	fmt.Println("=== atom and atom")
 	generateCoin("print foobar")
 }
+
+func TestAtomArgs(t *testing.T) {
+	fmt.Println("=== args in atom")
+	generateCoin("foobar ( x ) = 'Hello, ' + x")
+}

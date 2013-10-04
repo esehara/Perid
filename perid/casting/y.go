@@ -35,7 +35,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyMaxDepth = 200
 
-//line casting.y:81
+//line casting.y:90
  /* --- start of programs */
 
 var oretokens = [...]int {
@@ -102,53 +102,60 @@ var yyExca = []int{
 	1, -1,
 	-2, 0,
 	-1, 2,
-	5, 7,
+	5, 8,
 	-2, 1,
 }
 
-const yyNprod = 10
+const yyNprod = 11
 const yyPrivate = 57344
 
 var yyTokenNames []string
 var yyStates []string
 
-const yyLast = 18
+const yyLast = 21
 
 var yyAct = []int{
 
-	9, 3, 13, 7, 9, 6, 1, 11, 6, 12,
-	2, 6, 5, 4, 0, 0, 8, 10,
+	3, 10, 16, 17, 7, 12, 8, 15, 13, 10,
+	6, 2, 6, 6, 5, 14, 1, 4, 18, 11,
+	9,
 }
 var yyPact = []int{
 
-	6, -1000, -4, -1000, 3, -1000, 1, 0, -1000, -1000,
-	-1000, -3, -1000, -1000,
+	7, -1000, -3, -1000, 8, -1000, -1, 5, 11, -1000,
+	-1000, -1000, 2, -1000, -8, -1000, -4, 5, -1000,
 }
 var yyPgo = []int{
 
-	0, 6, 13, 1, 12,
+	0, 16, 17, 0, 14,
 }
 var yyR1 = []int{
 
-	0, 1, 1, 1, 1, 3, 3, 2, 4, 4,
+	0, 1, 1, 1, 1, 1, 3, 3, 2, 4,
+	4,
 }
 var yyR2 = []int{
 
-	0, 1, 1, 3, 2, 2, 1, 1, 1, 3,
+	0, 1, 1, 3, 6, 2, 2, 1, 1, 1,
+	3,
 }
 var yyChk = []int{
 
-	-1000, -1, 4, -3, -2, -4, 5, 7, -2, 4,
-	-4, 6, -3, 5,
+	-1000, -1, 4, -3, -2, -4, 5, 7, 9, -2,
+	4, -4, 6, -3, 4, 5, 10, 7, -3,
 }
 var yyDef = []int{
 
-	0, -2, -2, 2, 0, 6, 8, 0, 4, 7,
-	5, 0, 3, 9,
+	0, -2, -2, 2, 0, 7, 9, 0, 0, 5,
+	8, 6, 0, 3, 0, 10, 0, 0, 4,
 }
 var yyTok1 = []int{
 
-	1,
+	1, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+	9, 10,
 }
 var yyTok2 = []int{
 
@@ -411,40 +418,51 @@ yydefault:
 		//line casting.y:42
 		{
 	  var v Value
+	  if val, ok := yyS[yypt-0].val.(Val); ok {
+			v = Box{Type: BINDER, Value: yyS[yypt-5].val, Box: val}
+		} else {
+			v = Box{Type: BINDER, Value: yyS[yypt-5].val, Box: Val{yyS[yypt-0].val}}
+		}
+		yylex.(*lex).NewBox(v)
+	  }
+	case 5:
+		//line casting.y:51
+		{
+	  var v Value
 		if val, ok := yyS[yypt-0].val.(Value); ok {
 			v = Box{Type: ATOM, Value: yyS[yypt-1].val, Box: Val{val}}
 		yylex.(*lex).NewBox(v)
 	   }
 	 }
-	case 5:
-		//line casting.y:52
+	case 6:
+		//line casting.y:61
 		{
 		if val, ok := yyS[yypt-1].val.(Box); ok {
 			val.Box = yyS[yypt-0].values 
 			yyVAL.val = val
 		}
 	}
-	case 6:
-		//line casting.y:58
+	case 7:
+		//line casting.y:67
 		{
 		yyVAL.val = yyS[yypt-0].values
 	}
-	case 7:
-		//line casting.y:63
+	case 8:
+		//line casting.y:72
 		{
 	  var newval Value
 	  newval = Box{Type:ATOM, Value:yyS[yypt-0].val}
 	  yyVAL.val = newval
 	}
-	case 8:
-		//line casting.y:69
+	case 9:
+		//line casting.y:78
 		{
 	            var newval Val
 	            newval = Val{Box{Type: STRING, Value: yyS[yypt-0].val}}
 	            yyVAL.values = newval
 	         }
-	case 9:
-		//line casting.y:74
+	case 10:
+		//line casting.y:83
 		{
 	            var newval Val
 	            result := operate_string(yyS[yypt-2].val, yyS[yypt-1].val, yyS[yypt-0].val)

@@ -39,6 +39,15 @@ import (
 	}
 	yylex.(*lex).NewBox(v)
  }
+| ATOM '(' ATOM ')' BINDER Expression {
+  var v Value
+  if val, ok := $6.(Val); ok {
+		v = Box{Type: BINDER, Value: $1, Box: val}
+	} else {
+		v = Box{Type: BINDER, Value: $1, Box: Val{$6}}
+	}
+	yylex.(*lex).NewBox(v)
+  }
 | ATOM AtomExpression {
   var v Value
 	if val, ok := $2.(Value); ok {

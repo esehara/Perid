@@ -77,3 +77,11 @@ func TestDefineBinder(t *testing.T) {
 			t.Errorf("Ores should mining 3, but really %d.", len(ores))
 		}
 }
+
+func TestDefineOpenCloseRoundParen(t *testing.T) {
+    if !isDefine(
+        "foobar (x y z)",
+        "RoundParen", 6) {
+            t.Errorf("Ores should mining 6, but really %d.", len(ores))
+        }
+}

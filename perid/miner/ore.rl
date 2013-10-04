@@ -16,49 +16,34 @@
 	# ---- Operator ----
 	operator = "+" | "-" | "*" | "/";
 	binder = "=";
+    
+    # ---- parins ----
+    roundparen_o = "(";
+    roundparen_c = ")";
 
     #Mining Token
     main := |*
         atom => {
-            material := Ore{
-                Token: ATOM,
-                Value: data[ts:te],
-            }
-            material.Research()
-            ores = append(ores, material) 
+            ores = appendOre(ATOM, ores, data, ts, te)
         };
         string => {
-            material := Ore{
-                Token: STRING,
-                Value: data[ts:te],
-            }
-            material.Research()
-            ores = append(ores, material)
+            ores = appendOre(STRING, ores, data, ts, te)
 		};
 		integer => {
-			material := Ore {
-				Token: INTEGER,
-				Value: data[ts:te],
-			}
-			material.Research()
-			ores = append(ores, material)
+			ores = appendOre(INTEGER, ores, data, ts, te)
 		};
 		operator => {
-			material := Ore {
-				Token: OPERATOR,
-				Value: data[ts:te],
-			}
-			material.Research()
-			ores = append(ores, material)
+            ores = appendOre(OPERATOR, ores, data, ts, te)
 		};
 		binder => {
-			material := Ore {
-				Token: BINDER,
-				Value: data[ts:te],
-			}
-			material.Research()
-			ores = append(ores, material)
-		};
+		    ores = appendOre(BINDER, ores, data, ts, te)
+        };
+        roundparen_o => {
+            ores = appendOre(ROUNDPAREN_O, ores, data, ts, te)
+        };
+        roundparen_c => {
+            ores = appendOre(ROUNDPAREN_C, ores, data, ts, te)
+        };
         space;
     *|;
 }%%
@@ -68,6 +53,7 @@ package miner
 %% write data;
 
 type Token int
+
 
 const(
     //Special Token
@@ -82,7 +68,9 @@ const(
     end_define_literal
 	OPERATOR
 	BINDER
-	)
+	ROUNDPAREN_O
+    ROUNDPAREN_C
+    )
 
 var tokens = [...]string {
     STRING: "STRING",
@@ -90,6 +78,8 @@ var tokens = [...]string {
 	INTEGER: "INTEGER",
 	OPERATOR: "OPERATOR",
 	BINDER: "BINDER",
+    ROUNDPAREN_O: "(",
+    ROUNDPAREN_C: ")",
 }
 
 var keywords map[string]Token
@@ -104,6 +94,15 @@ type Ore struct {
     Value Any
 }
 var material Ore
+
+func appendOre (miningore Token, bag []Ore, data string, ts, te int) []Ore {
+	material := Ore {
+	    Token: miningore,
+		Value: data[ts:te],
+	}
+	material.Research()
+	return append(bag, material)
+}
 
 func (tok Token) ToString() string {
     return tokens[tok]
